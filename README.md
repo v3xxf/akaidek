@@ -6,7 +6,7 @@ Professional dark-themed intake form at `/private` with admin-only dashboard at 
 
 - Public no-login form for high-intent registration and deposit details.
 - Admin-only login and secure dashboard.
-- MySQL (PlanetScale) storage via Prisma.
+- MongoDB Atlas storage via Prisma.
 - Input validation on client + server.
 - Basic request rate limiting on submission API.
 - Existing redirect preserved: `/registration` -> Shortink URL.
@@ -16,7 +16,7 @@ Professional dark-themed intake form at `/private` with admin-only dashboard at 
 - Next.js App Router
 - Tailwind CSS
 - NextAuth (Credentials)
-- Prisma + PlanetScale (MySQL)
+- Prisma + MongoDB Atlas
 
 ## Local setup
 
@@ -34,7 +34,7 @@ cp .env.example .env.local
 
 3. Fill in values in `.env.local`:
 
-- `DATABASE_URL` (PlanetScale connection string)
+- `DATABASE_URL` (MongoDB Atlas connection string)
 - `NEXTAUTH_URL` (local: `http://localhost:3000`, prod: `https://aidek.in`)
 - `NEXTAUTH_SECRET` (long random string)
 - `ADMIN_SEED_EMAIL`
@@ -59,9 +59,9 @@ npm run db:seed
 npm run dev
 ```
 
-## Production on Vercel + PlanetScale
+## Production on Vercel + MongoDB Atlas
 
-1. Create PlanetScale database and copy connection string.
+1. Create MongoDB Atlas cluster, copy connection string.
 2. In Vercel project settings, add environment variables:
    - `DATABASE_URL`
    - `NEXTAUTH_URL=https://aidek.in`
