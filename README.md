@@ -1,26 +1,90 @@
-# Aidek – Registration redirect
+# AIDEK Private Deposit System
 
-Redirects **aidek.com/registration** to the Shortink registration page.
+Professional dark-themed intake form at `/private` with admin-only dashboard at `/admin`.
 
-## Deploy on Vercel
+## Features
 
-1. **Push this project to GitHub** (or GitLab/Bitbucket), or use Vercel CLI.
+- Public no-login form for high-intent registration and deposit details.
+- Admin-only login and secure dashboard.
+- MySQL (PlanetScale) storage via Prisma.
+- Input validation on client + server.
+- Basic request rate limiting on submission API.
+- Existing redirect preserved: `/registration` -> Shortink URL.
 
-2. **Import in Vercel**
-   - Go to [vercel.com](https://vercel.com) → Add New → Project
-   - Import your repo and deploy (no build step needed).
+## Stack
 
-3. **Add your domain**
-   - Project → **Settings** → **Domains**
-   - Add **aidek.com**
-   - Follow Vercel’s instructions to add the DNS records at your domain registrar (usually an A record or CNAME as shown).
+- Next.js App Router
+- Tailwind CSS
+- NextAuth (Credentials)
+- Prisma + PlanetScale (MySQL)
 
-4. **Optional: redirect root**
-   - If you want aidek.com (no path) to also go to registration, say so and we can add that redirect.
+## Local setup
 
-## What’s in this repo
+1. Install dependencies:
 
-- **vercel.json** – Redirect from `/registration` to the Shortink URL (302, so links stay correct).
-- **index.html** – Simple landing page; visitors to the root can click through to registration.
+```bash
+npm install
+```
 
-After deployment, **https://aidek.com/registration** will send users to the registration URL.
+2. Create env file:
+
+```bash
+cp .env.example .env.local
+```
+
+3. Fill in values in `.env.local`:
+
+- `DATABASE_URL` (PlanetScale connection string)
+- `NEXTAUTH_URL` (local: `http://localhost:3000`, prod: `https://aidek.in`)
+- `NEXTAUTH_SECRET` (long random string)
+- `ADMIN_SEED_EMAIL`
+- `ADMIN_SEED_PASSWORD`
+
+4. Generate Prisma client and push schema:
+
+```bash
+npm run db:generate
+npm run db:push
+```
+
+5. Seed admin account:
+
+```bash
+npm run db:seed
+```
+
+6. Run dev server:
+
+```bash
+npm run dev
+```
+
+## Production on Vercel + PlanetScale
+
+1. Create PlanetScale database and copy connection string.
+2. In Vercel project settings, add environment variables:
+   - `DATABASE_URL`
+   - `NEXTAUTH_URL=https://aidek.in`
+   - `NEXTAUTH_SECRET`
+   - `ADMIN_SEED_EMAIL`
+   - `ADMIN_SEED_PASSWORD`
+3. Deploy app from GitHub or with CLI:
+
+```bash
+npm run deploy
+```
+
+4. Run Prisma deploy tasks (once per environment):
+
+```bash
+npm run db:generate
+npm run db:push
+npm run db:seed
+```
+
+## Important routes
+
+- Public form: `https://aidek.in/private`
+- Admin login: `https://aidek.in/admin/login`
+- Admin dashboard: `https://aidek.in/admin`
+- Existing redirect: `https://aidek.in/registration`
